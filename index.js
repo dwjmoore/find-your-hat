@@ -12,7 +12,7 @@ class Field {
 		this._gameOn = true;
 	}
 
-	static generateField(height, width) {
+	static generateField(height, width, holeWeight) {
 		let hatLocation = [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
 		while (hatLocation === [0, 0]) {
 			hatLocation = [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
@@ -23,17 +23,31 @@ class Field {
 			field.push([]);
 			for (let j = 0; j < width; j++) {
 				if (i === 0 && j === 0) {
-					field[i][j] = "*";
+					field[i][j] = pathCharacter;
 				} else if (i === hatLocation[0] && j === hatLocation[1]) {
-					field[i][j] = "^";
+					field[i][j] = hat;
 				} else {
-					const fieldItems = ["O", "░"]
-					const randomNum = Math.floor(Math.random() * 2);
-					field[i][j] = fieldItems[randomNum];
+					field[i][j] = Field.weightedRandom([hole, fieldCharacter], [holeWeight, 100 - holeWeight]);
 				}
 			}
 		}
 		return field;
+	}
+
+	static weightedRandom(items, weights) {
+		const cumulativeWeights = [];
+		for (let i = 0; i < weights.length; i += 1) {
+			cumulativeWeights[i] = weights[i] + (cumulativeWeights[i - 1] || 0);
+		}
+
+		const maxCumulativeWeight = cumulativeWeights[cumulativeWeights.length - 1];
+		const randomNumber = maxCumulativeWeight * Math.random();
+
+		for (let itemIndex = 0; itemIndex < items.length; itemIndex += 1) {
+			if (cumulativeWeights[itemIndex] >= randomNumber) {
+				return items[itemIndex];
+			}
+		}
 	}
 
 	runGame() {
@@ -119,9 +133,9 @@ class Field {
 	updateField() {
 		let rowLocation = this._playerLocation[0];
 		let colLocation = this._playerLocation[1];
-		this._field[rowLocation][colLocation] = "*";
+		this._field[rowLocation][colLocation] = pathCharacter;
 	}
 }
 
-const field = new Field(Field.generateField(10, 10));
+const field = new Field(Field.generateField(10, 10, 25));
 field.runGame();
