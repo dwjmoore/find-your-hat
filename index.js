@@ -17,9 +17,8 @@ class Field {
 		while (this._gameOn) {
 			this.print();
 			this.inputPlayerMove();
-			// test player location
+			this.testPlayerLocation();
 			// update field or end game
-			this._gameOn = false;
 		}
 		console.log("Thank you for playing! Good bye!");
 	}
@@ -69,11 +68,30 @@ class Field {
 			if (playerMove === "L") tempLocation[1] -= 1;
 			if (playerMove === "R") tempLocation[1] += 1;
 		}
-
-		console.log(`Your location is ${this._playerLocation}`);
+		return;
 	}
 
-
+	testPlayerLocation() {
+		let rowLocation = this._playerLocation[0];
+		let colLocation = this._playerLocation[1];
+		if (this._field[rowLocation][colLocation] === hat) {
+			console.log("You found your hat! You win!");
+			this._gameOn = false;
+			return;
+		}
+		if (this._field[rowLocation][colLocation] === hole) {
+			console.log("You fell down a hole. Game over!");
+			this._gameOn = false;
+			return;
+		}
+		if (this._field[rowLocation][colLocation] === fieldCharacter) {
+			console.log("Update field method to be called");
+			//update field
+			return;
+		}
+		console.log("You are going where you have already been.");
+		return;
+	}
 }
 
 const field = new Field([
@@ -87,16 +105,3 @@ const field = new Field([
 	['░', 'O', '░', '░', '░', '░', '░', '░'],
 ]);
 field.runGame();
-
-/*
-testPlayerLocation() {
-	if (this._field[this._playerLocation[0]][this._playerLocation[1]] === hat) {
-		console.log("You found your hat! You win!");
-		// call method to exit the program
-	}
-	if (this._field[this._playerLocation[0]][this._playerLocation[1]] === hole) {
-		console.log("You fell down a hole. Game over!");
-		// call method to exit program
-	}
-}
-*/
