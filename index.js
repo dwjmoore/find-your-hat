@@ -12,6 +12,30 @@ class Field {
 		this._gameOn = true;
 	}
 
+	static generateField(height, width) {
+		let hatLocation = [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
+		while (hatLocation === [0, 0]) {
+			hatLocation = [Math.floor(Math.random() * height), Math.floor(Math.random() * width)];
+		}
+
+		let field = [];
+		for (let i = 0; i < height; i++) {
+			field.push([]);
+			for (let j = 0; j < width; j++) {
+				if (i === 0 && j === 0) {
+					field[i][j] = "*";
+				} else if (i === hatLocation[0] && j === hatLocation[1]) {
+					field[i][j] = "^";
+				} else {
+					const fieldItems = ["O", "░"]
+					const randomNum = Math.floor(Math.random() * 2);
+					field[i][j] = fieldItems[randomNum];
+				}
+			}
+		}
+		return field;
+	}
+
 	runGame() {
 		console.log("Welcome to the game. Go find your hat, but don't fall into a hole.")
 		while (this._gameOn) {
@@ -99,14 +123,5 @@ class Field {
 	}
 }
 
-const field = new Field([
-	['*', '░', 'O', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-	['░', '^', '░', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-	['░', 'O', '░', '░', '░', '░', '░', '░'],
-]);
+const field = new Field(Field.generateField(10, 10));
 field.runGame();
