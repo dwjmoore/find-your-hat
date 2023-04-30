@@ -18,7 +18,6 @@ class Field {
 			this.print();
 			this.inputPlayerMove();
 			this.testPlayerLocation();
-			// update field or end game
 		}
 		console.log("Thank you for playing! Good bye!");
 	}
@@ -86,11 +85,17 @@ class Field {
 		}
 		if (this._field[rowLocation][colLocation] === fieldCharacter) {
 			console.log("Update field method to be called");
-			//update field
+			this.updateField();
 			return;
 		}
 		console.log("You are going where you have already been.");
 		return;
+	}
+
+	updateField() {
+		let rowLocation = this._playerLocation[0];
+		let colLocation = this._playerLocation[1];
+		this._field[rowLocation][colLocation] = "*";
 	}
 }
 
